@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { ExternalLink } from '@lucide/svelte';
-	import { env } from '$env/dynamic/public';
-    import { env as privateEnv } from '$env/dynamic/private';
 
 	interface Props {
 		app: {
@@ -14,9 +12,6 @@
 	}
 
 	let { app }: Props = $props();
-
-    // In Pocket ID, logos are often relative to the instance URL
-    // We might need to proxy them or just use the absolute URL if available.
 </script>
 
 <a
