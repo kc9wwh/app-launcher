@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ExternalLink } from '@lucide/svelte';
+	import { ExternalLink, MoreVertical, ArrowRight } from '@lucide/svelte';
 
 	interface Props {
 		app: {
@@ -7,46 +7,50 @@
 			name: string;
 			description?: string;
 			url: string;
-			logo_url?: string;
+			logo_url?: string | null;
 		};
 	}
 
 	let { app }: Props = $props();
+
+    // Remove protocol from URL for cleaner display
+    const displayUrl = $derived(app.url.replace(/^https?:\/\//, '').replace(/\/$/, ''));
 </script>
 
-<a
-	href={app.url}
-	target="_blank"
-	rel="noopener noreferrer"
-	class="group relative flex flex-col items-center justify-center p-6 rounded-2xl border bg-card hover:bg-accent/50 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md"
->
-	<div class="mb-4 relative">
-		{#if app.logo_url}
-			<img
-				src={app.logo_url}
-				alt={app.name}
-				class="size-16 object-contain rounded-xl transition-transform duration-300 group-hover:scale-110"
-			/>
-		{:else}
-			<div class="size-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary transition-transform duration-300 group-hover:scale-110">
-				<span class="text-2xl font-bold uppercase">{app.name.charAt(0)}</span>
+<div class="group relative bg-card border border-border rounded-xl p-4 flex flex-col h-full transition-all duration-200 hover:border-primary/50 shadow-sm">
+	<div class="flex items-start justify-between mb-4">
+		<div class="flex items-center gap-4">
+			<div class="size-12 rounded-lg bg-black/20 flex items-center justify-center overflow-hidden border border-white/5">
+				{#if app.logo_url}
+					<img src={app.logo_url} alt={app.name} class="size-8 object-contain" />
+				{:else}
+					<span class="text-xl font-bold text-primary/80 uppercase">{app.name.charAt(0)}</span>
+				{/if}
 			</div>
-		{/if}
-        
-        <div class="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div class="bg-primary text-primary-foreground p-1 rounded-full shadow-sm">
-                <ExternalLink size={12} />
-            </div>
-        </div>
+			<div class="flex flex-col min-w-0">
+				<h3 class="font-bold text-base truncate text-white">{app.name}</h3>
+				<span class="text-xs text-muted-foreground truncate">{displayUrl}</span>
+			</div>
+		</div>
+		<button class="text-muted-foreground hover:text-white transition-colors p-1">
+			<MoreVertical size={18} />
+		</button>
 	</div>
 
-	<h3 class="font-semibold text-lg text-center group-hover:text-primary transition-colors">
-		{app.name}
-	</h3>
-    
-    {#if app.description}
-        <p class="mt-2 text-xs text-muted-foreground text-center line-clamp-2 max-w-[150px]">
-            {app.description}
-        </p>
-    {/if}
-</a>
+    <div class="mt-auto pt-4 flex items-center justify-between">
+        <div class="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+            <ArrowRight size={12} />
+            <span>Ready to launch</span>
+        </div>
+        
+        <a
+            href={app.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm"
+        >
+            <span>Launch</span>
+            <ExternalLink size={14} />
+        </a>
+    </div>
+</div>

@@ -9,6 +9,7 @@ declare global {
 				username: string;
 				email?: string;
 				groups?: string[];
+				picture?: string;
 			} | null;
 			isAuthenticated: boolean;
 		}

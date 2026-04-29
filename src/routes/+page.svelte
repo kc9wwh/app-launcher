@@ -1,72 +1,43 @@
 <script lang="ts">
-	import { Search, Zap, Loader2 } from '@lucide/svelte';
+	import { LayoutGrid, AlertCircle } from '@lucide/svelte';
 	import AppCard from '$lib/components/AppCard.svelte';
-	import { env } from '$env/dynamic/public';
 
 	let { data } = $props();
-
-	let searchTerm = $state('');
-
-	const filteredApps = $derived(
-		data.apps.filter((app: any) =>
-			app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			(app.description && app.description.toLowerCase().includes(searchTerm.toLowerCase()))
-		)
-	);
-
-	const title = env.PUBLIC_LAUNCHER_TITLE || 'App Launcher';
-	const description = env.PUBLIC_LAUNCHER_DESCRIPTION || 'Access your shared services below.';
 </script>
 
-<div class="max-w-7xl mx-auto px-4 py-12 w-full">
-	<div class="mb-12 text-center">
-		<h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
-			{title}
-		</h1>
-		<p class="text-muted-foreground text-lg max-w-2xl mx-auto">
-			{description}
-		</p>
-	</div>
-
-	<div class="max-w-md mx-auto mb-16">
-		<div class="relative group">
-			<Search
-				class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors"
-				size={20}
-			/>
-			<input
-				type="text"
-				placeholder="Search for an application..."
-				class="w-full pl-12 pr-4 py-4 rounded-2xl border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm"
-				bind:value={searchTerm}
-			/>
-		</div>
-	</div>
+<div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="flex items-center gap-3 mb-8">
+        <div class="p-2 rounded-lg bg-primary/10 text-primary">
+            <LayoutGrid size={20} />
+        </div>
+        <h2 class="text-xl font-black tracking-tight text-white">My Apps</h2>
+    </div>
 
 	{#if data.error}
-		<div class="p-8 rounded-2xl border bg-destructive/5 text-destructive text-center mb-12">
-			<p class="font-semibold text-lg">{data.error}</p>
-			<p class="text-sm opacity-80 mt-1">Please check your configuration or contact your administrator.</p>
+		<div class="p-6 rounded-xl border border-destructive/20 bg-destructive/5 text-destructive flex items-start gap-4 mb-8">
+			<AlertCircle size={20} class="shrink-0 mt-0.5" />
+            <div class="flex flex-col gap-1">
+                <p class="font-bold text-sm">Error Loading Applications</p>
+                <p class="text-xs opacity-80">{data.error}</p>
+            </div>
 		</div>
 	{/if}
 
-	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-		{#each filteredApps as app}
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+		{#each data.apps as app}
 			<AppCard {app} />
 		{:else}
-			<div class="col-span-full py-24 text-center">
-				<div class="inline-flex p-4 rounded-full bg-muted mb-4">
-					<Zap size={32} class="text-muted-foreground" />
-				</div>
-				<h3 class="text-xl font-semibold">No applications found</h3>
-				<p class="text-muted-foreground mt-2">
-					{#if searchTerm}
-						No applications match your search "{searchTerm}".
-					{:else}
-						You don't have access to any applications yet.
-					{/if}
-				</p>
-			</div>
+			{#if !data.error}
+                <div class="col-span-full py-20 flex flex-col items-center justify-center text-center bg-card/20 rounded-2xl border border-dashed border-border">
+                    <div class="size-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                        <LayoutGrid size={32} class="text-muted-foreground" />
+                    </div>
+                    <h3 class="text-lg font-bold">No applications found</h3>
+                    <p class="text-xs text-muted-foreground mt-2 max-w-xs">
+                        You don't have access to any applications yet. Contact your administrator to request access.
+                    </p>
+                </div>
+            {/if}
 		{/each}
 	</div>
 </div>

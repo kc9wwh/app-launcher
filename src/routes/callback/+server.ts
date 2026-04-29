@@ -29,7 +29,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         sub: claims.sub,
         username: (claims.preferred_username as string) || (claims.name as string) || (claims.sub as string),
         email: claims.email as string,
-        groups: (claims.groups as string[]) || []
+        groups: (claims.groups as string[]) || [],
+        picture: claims.picture as string
     };
 
     // Store user info in a cookie
