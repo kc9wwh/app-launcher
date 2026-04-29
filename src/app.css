@@ -1,37 +1,37 @@
 @import "tailwindcss";
 
 @theme inline {
-    /* Pocket ID Exact Palette (OKLCH) */
-    --color-background: oklch(0.145 0 0);
-    --color-foreground: oklch(0.985 0 0);
+    /* Precise Pocket ID Hex Palette */
+    --color-background: #09090b;
+    --color-foreground: #fafafa;
     
-    --color-card: oklch(0.145 0 0); /* Pocket ID uses background as card bg in some views */
-    --color-card-foreground: oklch(0.985 0 0);
+    --color-card: #18181b;
+    --color-card-foreground: #fafafa;
     
-    --color-primary: oklch(0.707 0.165 25.425); /* Pocket ID Logo Orange */
-    --color-primary-foreground: oklch(0.205 0 0);
+    --color-primary: #f97316; /* Vibrant Pocket ID Orange */
+    --color-primary-foreground: #ffffff;
     
-    --color-secondary: oklch(0.269 0 0);
-    --color-secondary-foreground: oklch(0.985 0 0);
+    --color-secondary: #27272a;
+    --color-secondary-foreground: #fafafa;
     
-    --color-muted: oklch(0.269 0 0);
-    --color-muted-foreground: oklch(0.708 0 0);
+    --color-muted: #27272a;
+    --color-muted-foreground: #a1a1aa;
     
-    --color-accent: oklch(0.269 0 0);
-    --color-accent-foreground: oklch(0.985 0 0);
+    --color-accent: #27272a;
+    --color-accent-foreground: #fafafa;
     
-    --color-border: oklch(1 0 0 / 10%);
+    --color-border: #27272a;
     
-    --radius-lg: 0.625rem;
+    --radius-lg: 0.5rem;
     
     --font-playfair: "Playfair Display", serif;
 
     @keyframes fade-in {
-        from { opacity: 0; transform: translateY(10px); }
+        from { opacity: 0; transform: translateY(5px); }
         to { opacity: 1; transform: translateY(0); }
     }
     
-    --animate-fade-in: fade-in 0.3s ease-out;
+    --animate-fade-in: fade-in 0.2s ease-out;
 }
 
 @layer base {
@@ -39,8 +39,7 @@
         @apply border-border;
     }
     body {
-        @apply bg-background text-foreground;
-        font-feature-settings: "rlig" 1, "calt" 1;
+        @apply bg-background text-foreground antialiased;
     }
     h1, h2, h3, h4, h5, h6 {
         font-family: var(--font-playfair);
