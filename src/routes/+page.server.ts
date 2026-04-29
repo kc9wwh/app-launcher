@@ -8,22 +8,31 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	try {
-		const allApps = await PocketIDService.fetchApps();
+		const response = await PocketIDService.fetchApps();
+        
+        // Handle the {"data": [...]} wrapper
+        const allApps = Array.isArray(response) ? response : (response.data || []);
         
         if (!Array.isArray(allApps)) {
-            console.error('Pocket ID API returned non-array:', allApps);
-            throw new Error(`API returned unexpected data format. Check your API Key permissions. Received: ${JSON.stringify(allApps)}`);
+            console.error('Pocket ID API returned unexpected format:', response);
+            throw new Error('API returned unexpected data format.');
         }
 
+        const baseUrl = env.POCKET_ID_URL?.endsWith('/') 
+            ? env.POCKET_ID_URL.slice(0, -1) 
+            : env.POCKET_ID_URL;
+
         const processedApps = allApps.map((app: any) => {
-            if (app.logo_url && !app.logo_url.startsWith('http')) {
-                const baseUrl = env.POCKET_ID_URL?.endsWith('/') 
-                    ? env.POCKET_ID_URL.slice(0, -1) 
-                    : env.POCKET_ID_URL;
-                app.logo_url = `${baseUrl}${app.logo_url.startsWith('/') ? '' : '/'}${app.logo_url}`;
-            }
-            return app;
-        }).filter((app: any) => app.is_active !== false);
+            // Map Pocket ID fields to our internal format
+            return {
+                id: app.id,
+                name: app.name,
+                description: app.description || '',
+                url: app.launchURL || app.url || '#',
+                // Construct logo URL based on app.id if hasLogo is true
+                logo_url: app.hasLogo ? `${baseUrl}/api/oidc/clients/${app.id}/logo` : null
+            };
+        });
 
 		return {
 			apps: processedApps,
