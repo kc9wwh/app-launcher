@@ -1,55 +1,48 @@
 @import "tailwindcss";
 
-@theme {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --color-primary: var(--primary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-muted: var(--muted);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-accent: var(--accent);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-card: var(--card);
-    --color-card-foreground: var(--card-foreground);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
+@theme inline {
+    /* Pocket ID Exact Palette (OKLCH) */
+    --color-background: oklch(0.145 0 0);
+    --color-foreground: oklch(0.985 0 0);
+    
+    --color-card: oklch(0.145 0 0); /* Pocket ID uses background as card bg in some views */
+    --color-card-foreground: oklch(0.985 0 0);
+    
+    --color-primary: oklch(0.707 0.165 25.425); /* Pocket ID Logo Orange */
+    --color-primary-foreground: oklch(0.205 0 0);
+    
+    --color-secondary: oklch(0.269 0 0);
+    --color-secondary-foreground: oklch(0.985 0 0);
+    
+    --color-muted: oklch(0.269 0 0);
+    --color-muted-foreground: oklch(0.708 0 0);
+    
+    --color-accent: oklch(0.269 0 0);
+    --color-accent-foreground: oklch(0.985 0 0);
+    
+    --color-border: oklch(1 0 0 / 10%);
+    
+    --radius-lg: 0.625rem;
+    
+    --font-playfair: "Playfair Display", serif;
+
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    --animate-fade-in: fade-in 0.3s ease-out;
 }
 
-:root {
-    /* Pocket ID Dark Theme Defaults */
-    --background: #09090b;
-    --foreground: #fafafa;
-    
-    --card: #18181b;
-    --card-foreground: #fafafa;
-    
-    --popover: #09090b;
-    --popover-foreground: #fafafa;
-    
-    --primary: #f97316; /* Pocket ID Orange */
-    --primary-foreground: #ffffff;
-    
-    --secondary: #27272a;
-    --secondary-foreground: #fafafa;
-    
-    --muted: #27272a;
-    --muted-foreground: #a1a1aa;
-    
-    --accent: #27272a;
-    --accent-foreground: #fafafa;
-    
-    --destructive: #ef4444;
-    --destructive-foreground: #fafafa;
-    
-    --border: #27272a;
-    --input: #27272a;
-    --ring: #f97316;
-    
-    --radius: 0.75rem;
-}
-
-body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-playfair);
+    }
 }
