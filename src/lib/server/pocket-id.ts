@@ -27,16 +27,24 @@ export class PocketIDService {
         }
 
         const apiKey = env.POCKET_ID_API_KEY;
-		const response = await fetch(`${env.POCKET_ID_URL}/api/oidc/clients`, {
-			headers: {
-				'X-API-Key': apiKey
-			}
-		});
+        const url = `${env.POCKET_ID_URL}/api/oidc/clients`;
+        
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'X-API-Key': apiKey
+                }
+            });
 
-		if (!response.ok) {
-			throw new Error('Failed to fetch apps from Pocket ID');
-		}
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`Pocket ID API error (${response.status}): ${text || response.statusText}`);
+            }
 
-		return await response.json();
+            return await response.json();
+        } catch (e: any) {
+            console.error('Fetch error:', e);
+            throw new Error(`Failed to fetch from ${url}: ${e.message}`);
+        }
 	}
 }
