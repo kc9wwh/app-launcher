@@ -9,12 +9,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	try {
 		const allApps = await PocketIDService.fetchApps();
-        const userGroups = locals.user.groups || [];
+        
+        if (!Array.isArray(allApps)) {
+            console.error('Pocket ID API returned non-array:', allApps);
+            throw new Error(`API returned unexpected data format. Check your API Key permissions. Received: ${JSON.stringify(allApps)}`);
+        }
 
-        // Note: We are just showing all active apps for now to confirm the API works
-        // If the user wants strict group filtering, we can add it back once we see the data structure
         const processedApps = allApps.map((app: any) => {
-            // Ensure logo_url is absolute
             if (app.logo_url && !app.logo_url.startsWith('http')) {
                 const baseUrl = env.POCKET_ID_URL?.endsWith('/') 
                     ? env.POCKET_ID_URL.slice(0, -1) 
