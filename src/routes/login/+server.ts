@@ -14,8 +14,11 @@ export const GET: RequestHandler = async ({ cookies }) => {
 	cookies.set('oidc_code_verifier', code_verifier, { path: '/', httpOnly: true, secure: true, maxAge: 60 * 5 });
 	cookies.set('oidc_state', state, { path: '/', httpOnly: true, secure: true, maxAge: 60 * 5 });
 
+    const redirectUri = `${env.PUBLIC_APP_URL}/callback`;
+    console.log(`Starting OIDC login. Using redirect_uri: ${redirectUri}`);
+
     const parameters: Record<string, string> = {
-        redirect_uri: `${env.PUBLIC_APP_URL}/callback`,
+        redirect_uri: redirectUri,
         scope: 'openid profile email groups',
         state,
         code_challenge,
