@@ -1,37 +1,29 @@
 @import "tailwindcss";
 
 @theme inline {
-    /* Precise Pocket ID Hex Palette */
+    /* Official Pocket ID Font Stack */
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    
+    /* Official Colors */
     --color-background: #09090b;
     --color-foreground: #fafafa;
-    
     --color-card: #18181b;
-    --color-card-foreground: #fafafa;
-    
-    --color-primary: #f97316; /* Vibrant Pocket ID Orange */
-    --color-primary-foreground: #ffffff;
-    
-    --color-secondary: #27272a;
-    --color-secondary-foreground: #fafafa;
-    
-    --color-muted: #27272a;
-    --color-muted-foreground: #a1a1aa;
-    
-    --color-accent: #27272a;
-    --color-accent-foreground: #fafafa;
-    
     --color-border: #27272a;
+    --color-primary: #f97316;
     
+    /* Official Spacing & Sizing from your snippet */
+    --spacing: 0.25rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    --tracking-tight: -0.025em;
     --radius-lg: 0.5rem;
-    
-    --font-playfair: "Playfair Display", serif;
-
-    @keyframes fade-in {
-        from { opacity: 0; transform: translateY(5px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    --animate-fade-in: fade-in 0.2s ease-out;
 }
 
 @layer base {
@@ -40,8 +32,10 @@
     }
     body {
         @apply bg-background text-foreground antialiased;
+        font-family: var(--font-sans);
     }
     h1, h2, h3, h4, h5, h6 {
-        font-family: var(--font-playfair);
+        font-family: var(--font-sans);
+        @apply font-bold tracking-tight;
     }
 }
