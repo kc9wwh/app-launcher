@@ -63,7 +63,7 @@
                 </div>
                 {#if slogan}
                     <span class="hidden lg:inline text-[10px] italic text-muted-foreground font-medium border-l border-border pl-4 py-1 opacity-50 uppercase tracking-widest">{slogan}</span>
-                {#/if}
+                {/if}
 			</div>
 
 			<div class="flex items-center gap-3">
