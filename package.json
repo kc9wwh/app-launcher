@@ -26,6 +26,7 @@
 		"@sveltejs/adapter-node": "^5.5.4",
 		"clsx": "^2.1.1",
 		"openid-client": "^6.8.4",
+		"pino": "^10.3.1",
 		"tailwind-merge": "^3.5.0"
 	}
 }

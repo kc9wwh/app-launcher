@@ -42,6 +42,8 @@ Create a `.env` file (or set these in your Docker template):
 | `PUBLIC_APP_URL` | The public URL of this launcher | `https://launcher.example.com` |
 | `PUBLIC_LAUNCHER_TITLE` | Custom title shown in header | `Family Apps` |
 | `PUBLIC_LAUNCHER_DESCRIPTION` | Custom welcome message | `Access our services below` |
+| `LOG_LEVEL` | Logging verbosity (debug, info, warn, error) | `info` |
+| `LOG_PATH` | Internal container path for persistent log file | `/app/logs/launcher.log` |
 
 ---
 
@@ -51,11 +53,14 @@ Create a `.env` file (or set these in your Docker template):
 1. Go to the **Docker** tab in Unraid.
 2. Click **Add Container**.
 3. **Name:** `pocket-id-launcher`
-4. **Repository:** `your-registry/pocket-id-launcher` (or build locally).
-5. **Network Type:** `Bridge` (or your preferred network).
-6. **Fixed IP:** (Optional)
-7. **Port 3000:** Map to your desired host port.
-8. Add the **Environment Variables** listed above using the "Add another Path, Port, Variable, Label or Device" button.
+4. **Repository:** `ghcr.io/kc9wwh/app-launcher:latest`
+5. **Network Type:** `Bridge`.
+6. **Port 3000:** Map to your desired host port.
+7. **Volume Mapping (Persistence):**
+    - **Container Path:** `/app/logs/`
+    - **Host Path:** `/mnt/user/appdata/app-launcher/`
+    - **Access Mode:** Read/Write
+8. **Environment Variables:** Add the variables listed above. Set `LOG_PATH` to `/app/logs/launcher.log` to enable persistent logging to your appdata folder.
 
 ### Cloudflare Tunnel
 If using a Cloudflare Tunnel:

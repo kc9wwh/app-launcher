@@ -1,5 +1,6 @@
 import { PocketIDService } from '$lib/server/pocket-id';
 import { env } from '$env/dynamic/private';
+import { logger } from '$lib/server/logger';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -14,7 +15,10 @@ export const load: PageServerLoad = async ({ locals }) => {
         const allApps = Array.isArray(response) ? response : (response.data || []);
         
         if (!Array.isArray(allApps)) {
-            console.error('Pocket ID API returned unexpected format:', response);
+            logger.error({ 
+                event: 'api_data_format_error', 
+                response 
+            }, 'Pocket ID API returned unexpected format');
             throw new Error('API returned unexpected data format.');
         }
 
@@ -25,25 +29,33 @@ export const load: PageServerLoad = async ({ locals }) => {
         const currentClientId = env.OIDC_CLIENT_ID;
 
         const processedApps = allApps
-            .filter((app: any) => app.id !== currentClientId) // Don't show the launcher itself
+            .filter((app: any) => app.id !== currentClientId)
             .map((app: any) => {
-                // Map Pocket ID fields to our internal format
                 return {
                     id: app.id,
                     name: app.name,
                     description: app.description || '',
                     url: app.launchURL || app.url || '#',
-                    // Construct logo URL based on app.id if hasLogo is true
                     logo_url: app.hasLogo ? `${baseUrl}/api/oidc/clients/${app.id}/logo` : null
                 };
             });
+
+        logger.info({ 
+            user: locals.user.username,
+            processed_app_count: processedApps.length 
+        }, 'Dashboard loaded for user');
 
 		return {
 			apps: processedApps,
 			user: locals.user
 		};
 	} catch (e: any) {
-		console.error('Error loading apps:', e);
+		logger.error({ 
+            event: 'dashboard_load_failed', 
+            user: locals.user.username,
+            error: e.message 
+        }, 'Failed to load dashboard apps');
+        
 		return {
 			apps: [],
 			user: locals.user,
