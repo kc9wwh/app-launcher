@@ -2,7 +2,7 @@
 
 A clean, simple, and aesthetically pleasing application launcher designed for families and friends. It integrates directly with your self-hosted **Pocket ID** instance to fetch applications and handle authentication.
 
-![Screenshot Placeholder](https://via.placeholder.com/800x450?text=Pocket+ID+App+Launcher)
+![Dashboard Screenshot](./assets/screenshot.png)
 
 ## Features
 - **OIDC Authentication:** Secured by your own Pocket ID instance.
