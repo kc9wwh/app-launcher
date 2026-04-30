@@ -6,12 +6,14 @@
     import { ModeWatcher } from 'mode-watcher';
     import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	const title = env.PUBLIC_LAUNCHER_TITLE || 'App Launcher';
     const slogan = env.PUBLIC_LAUNCHER_DESCRIPTION || '';
-    const pocketIdUrl = env.POCKET_ID_URL || '';
-	const isAuthenticated = $derived(page.data.user !== undefined && page.data.user !== null);
+    const pocketIdUrl = data.pocketIdUrl || '';
+    
+	const isAuthenticated = $derived(data.user !== undefined && data.user !== null);
+    const displayName = $derived(data.user?.firstName || data.user?.username || 'User');
 </script>
 
 <ModeWatcher />
@@ -39,15 +41,15 @@
                         href="{pocketIdUrl}/settings/account" 
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold hover:bg-secondary/80 transition-colors"
+                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold hover:bg-secondary/80 transition-colors shadow-sm"
                         title="Manage Account"
                     >
-						{#if page.data.user.picture}
-							<img src={page.data.user.picture} alt={page.data.user.username} class="size-4 rounded-full object-cover" />
+						{#if data.user.picture}
+							<img src={data.user.picture} alt={displayName} class="size-4 rounded-full object-cover" />
 						{:else}
 							<UserCircle size={12} class="text-primary" />
 						{/if}
-						<span class="">{page.data.user.username}</span>
+						<span class="">{displayName}</span>
 					</a>
 					<a
 						href="/logout"

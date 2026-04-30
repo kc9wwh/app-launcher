@@ -28,6 +28,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
     const user = {
         sub: claims.sub,
         username: (claims.preferred_username as string) || (claims.name as string) || (claims.sub as string),
+        firstName: claims.given_name as string,
         email: claims.email as string,
         groups: (claims.groups as string[]) || [],
         picture: claims.picture as string
