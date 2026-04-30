@@ -22,17 +22,21 @@ export const load: PageServerLoad = async ({ locals }) => {
             ? env.POCKET_ID_URL.slice(0, -1) 
             : env.POCKET_ID_URL;
 
-        const processedApps = allApps.map((app: any) => {
-            // Map Pocket ID fields to our internal format
-            return {
-                id: app.id,
-                name: app.name,
-                description: app.description || '',
-                url: app.launchURL || app.url || '#',
-                // Construct logo URL based on app.id if hasLogo is true
-                logo_url: app.hasLogo ? `${baseUrl}/api/oidc/clients/${app.id}/logo` : null
-            };
-        });
+        const currentClientId = env.OIDC_CLIENT_ID;
+
+        const processedApps = allApps
+            .filter((app: any) => app.id !== currentClientId) // Don't show the launcher itself
+            .map((app: any) => {
+                // Map Pocket ID fields to our internal format
+                return {
+                    id: app.id,
+                    name: app.name,
+                    description: app.description || '',
+                    url: app.launchURL || app.url || '#',
+                    // Construct logo URL based on app.id if hasLogo is true
+                    logo_url: app.hasLogo ? `${baseUrl}/api/oidc/clients/${app.id}/logo` : null
+                };
+            });
 
 		return {
 			apps: processedApps,

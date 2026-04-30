@@ -10,14 +10,14 @@
         <div class="p-2 rounded-lg bg-primary/10 text-primary">
             <LayoutGrid size={20} />
         </div>
-        <h2 class="text-xl font-black tracking-tight text-white">My Apps</h2>
+        <h2 class="text-xl font-bold tracking-tight text-white">My apps</h2>
     </div>
 
 	{#if data.error}
 		<div class="p-6 rounded-xl border border-destructive/20 bg-destructive/5 text-destructive flex items-start gap-4 mb-8">
 			<AlertCircle size={20} class="shrink-0 mt-0.5" />
             <div class="flex flex-col gap-1">
-                <p class="font-bold text-sm">Error Loading Applications</p>
+                <p class="font-bold text-sm">Error loading applications</p>
                 <p class="text-xs opacity-80">{data.error}</p>
             </div>
 		</div>

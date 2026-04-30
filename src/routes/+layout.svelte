@@ -8,6 +8,7 @@
 
 	const title = env.PUBLIC_LAUNCHER_TITLE || 'App Launcher';
     const slogan = env.PUBLIC_LAUNCHER_DESCRIPTION || '';
+    const pocketIdUrl = env.POCKET_ID_URL || '';
 	const isAuthenticated = $derived(page.data.user !== undefined && page.data.user !== null);
 </script>
 
@@ -19,26 +20,32 @@
                     <div class="bg-primary p-1.5 rounded-lg text-white">
                         <LayoutGrid size={16} strokeWidth={3} />
                     </div>
-                    <span class="font-bold text-lg tracking-tight text-white uppercase">{title}</span>
+                    <span class="font-bold text-lg tracking-tight text-white">{title}</span>
                 </div>
                 {#if slogan}
-                    <span class="hidden lg:inline text-[9px] text-muted-foreground font-semibold border-l border-border pl-4 py-1 uppercase tracking-widest opacity-50">{slogan}</span>
+                    <span class="hidden lg:inline text-[10px] italic text-muted-foreground font-medium border-l border-border pl-4 py-1 opacity-50">{slogan}</span>
                 {/if}
 			</div>
 
 			<div class="flex items-center gap-3">
 				{#if isAuthenticated}
-					<div class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold">
+					<a 
+                        href="{pocketIdUrl}/settings/account" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold hover:bg-secondary/80 transition-colors"
+                        title="Manage Account"
+                    >
 						{#if page.data.user.picture}
 							<img src={page.data.user.picture} alt={page.data.user.username} class="size-4 rounded-full object-cover" />
 						{:else}
 							<UserCircle size={12} class="text-primary" />
 						{/if}
 						<span class="text-white">{page.data.user.username}</span>
-					</div>
+					</a>
 					<a
 						href="/logout"
-						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black bg-secondary hover:bg-secondary/80 transition-colors border border-border uppercase tracking-widest text-white"
+						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-white"
 					>
 						<LogOut size={12} />
 						<span>Logout</span>
@@ -53,7 +60,7 @@
 	</main>
 
 	<footer class="py-12 border-t border-border bg-black/40">
-		<div class="max-w-7xl mx-auto px-6 text-center text-[9px] uppercase tracking-[0.4em] text-muted-foreground font-black opacity-20">
+		<div class="max-w-7xl mx-auto px-6 text-center text-[9px] text-muted-foreground font-bold opacity-20">
 			<p>© {new Date().getFullYear()} {title}</p>
 			<p class="mt-2">Powered by Pocket ID</p>
 		</div>
