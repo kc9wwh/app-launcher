@@ -47,5 +47,12 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
     cookies.delete('oidc_code_verifier', { path: '/' });
     cookies.delete('oidc_state', { path: '/' });
 
+    const { logger } = await import('$lib/server/logger');
+    logger.info({ 
+        event: 'login_success', 
+        user: user.username,
+        ip: url.searchParams.get('ip') || 'unknown' // Middleware handles actual IP logging
+    }, `User ${user.username} successfully logged in`);
+
 	throw redirect(302, '/');
 };

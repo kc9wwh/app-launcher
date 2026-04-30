@@ -3,8 +3,12 @@ import { PocketIDService } from '$lib/server/pocket-id';
 import { env } from '$env/dynamic/public';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async ({ cookies }) => {
+export const GET: RequestHandler = async ({ cookies, locals }) => {
+    const username = locals.user?.username || 'unknown';
 	cookies.delete('session', { path: '/' });
+
+    const { logger } = await import('$lib/server/logger');
+    logger.info({ event: 'logout', user: username }, `User ${username} logged out`);
 
     const config = await PocketIDService.getConfig();
     const endSessionEndpoint = config.serverMetadata().end_session_endpoint;

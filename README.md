@@ -7,8 +7,10 @@ A clean, simple, and aesthetically pleasing application launcher designed for fa
 ## Features
 - **OIDC Authentication:** Secured by your own Pocket ID instance.
 - **Dynamic App List:** Automatically fetches applications you have access to via the Pocket ID API.
-- **Clean UI:** Modern design inspired by the Pocket ID portal.
+- **Light & Dark Mode:** Matches the official Pocket ID Zinc-style themes with a manual toggle.
+- **Clean UI:** Responsive grid that automatically adjusts based on screen width.
 - **Customizable:** Change titles and descriptions via environment variables.
+- **Unraid Optimized:** Structured JSON logging designed for RAM-based log protection and persistent file storage.
 
 ---
 
@@ -21,7 +23,7 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 #### A. Create an OIDC Client
 1. Go to **Administration** > **OIDC Clients** > **Add Client**.
 2. **Name:** `App Launcher` (or whatever you prefer).
-3. **Redirect URIs:** `https://launcher.yourdomain.com/callback` (Replace with your actual URL).
+3. **Callback URLs:** `https://launcher.yourdomain.com/callback` (Replace with your actual URL).
 4. **Client ID & Secret:** Note these down; you'll need them for the environment variables.
 
 #### B. Generate an API Key
@@ -31,19 +33,17 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 
 ### 2. Environment Variables
 
-Create a `.env` file (or set these in your Docker template):
-
-| Variable | Description | Example |
-| :--- | :--- | :--- |
-| `POCKET_ID_URL` | The URL of your Pocket ID instance | `https://auth.example.com` |
-| `POCKET_ID_API_KEY` | The API Token from step 1B | `pid_xxxx...` |
-| `OIDC_CLIENT_ID` | Client ID from step 1A | `...` |
-| `OIDC_CLIENT_SECRET` | Client Secret from step 1A | `...` |
-| `PUBLIC_APP_URL` | The public URL of this launcher | `https://launcher.example.com` |
-| `PUBLIC_LAUNCHER_TITLE` | Custom title shown in header | `Family Apps` |
-| `PUBLIC_LAUNCHER_DESCRIPTION` | Custom welcome message | `Access our services below` |
-| `LOG_LEVEL` | Logging verbosity (debug, info, warn, error) | `info` |
-| `LOG_PATH` | Internal container path for persistent log file | `/app/logs/launcher.log` |
+| Variable | Requirement | Description | Example |
+| :--- | :--- | :--- | :--- |
+| `POCKET_ID_URL` | **Required** | The URL of your Pocket ID instance | `https://auth.example.com` |
+| `POCKET_ID_API_KEY` | **Required** | The API Token from step 1B | `pid_xxxx...` |
+| `OIDC_CLIENT_ID` | **Required** | Client ID from step 1A | `...` |
+| `OIDC_CLIENT_SECRET` | **Required** | Client Secret from step 1A | `...` |
+| `PUBLIC_APP_URL` | **Required** | The public URL of this launcher | `https://launcher.example.com` |
+| `PUBLIC_LAUNCHER_TITLE` | Optional | Custom title shown in header | `Family Apps` |
+| `PUBLIC_LAUNCHER_DESCRIPTION` | Optional | Custom welcome message | `Access our services below` |
+| `LOG_LEVEL` | Optional | Logging verbosity (debug, info, warn, error) | `info` |
+| `LOG_PATH` | Optional | Path for persistent JSON log file | `/app/logs/launcher.log` |
 
 ---
 
@@ -56,11 +56,11 @@ Create a `.env` file (or set these in your Docker template):
 4. **Repository:** `ghcr.io/kc9wwh/app-launcher:latest`
 5. **Network Type:** `Bridge`.
 6. **Port 3000:** Map to your desired host port.
-7. **Volume Mapping (Persistence):**
+7. **Volume Mapping (Optional for persistence):**
     - **Container Path:** `/app/logs/`
     - **Host Path:** `/mnt/user/appdata/app-launcher/`
     - **Access Mode:** Read/Write
-8. **Environment Variables:** Add the variables listed above. Set `LOG_PATH` to `/app/logs/launcher.log` to enable persistent logging to your appdata folder.
+8. **Environment Variables:** Add the variables listed above. 
 
 ### Cloudflare Tunnel
 If using a Cloudflare Tunnel:
