@@ -4,13 +4,11 @@
 	import { page } from '$app/state';
 	import { env } from '$env/dynamic/public';
     import { onMount } from 'svelte';
-    import ThemeToggle from '$lib/components/ThemeToggle.svelte';
-
 	let { children, data } = $props();
 
 	const title = env.PUBLIC_LAUNCHER_TITLE || 'App Launcher';
     const slogan = env.PUBLIC_LAUNCHER_DESCRIPTION || '';
-    const pocketIdUrl = data.pocketIdUrl || '';
+    const pocketIdUrl = $derived(data.pocketIdUrl || '');
     
 	const isAuthenticated = $derived(data.user !== undefined && data.user !== null);
     const displayName = $derived(data.user?.firstName || data.user?.username || 'User');
