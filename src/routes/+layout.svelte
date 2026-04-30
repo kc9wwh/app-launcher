@@ -63,7 +63,7 @@
                 </div>
                 {#if slogan}
                     <span class="hidden lg:inline text-[10px] italic text-muted-foreground font-medium border-l border-border pl-4 py-1 opacity-50 uppercase tracking-widest">{slogan}</span>
-                {/if}
+                {#/if}
 			</div>
 
 			<div class="flex items-center gap-3">
@@ -110,10 +110,8 @@
 		{@render children()}
 	</main>
 
-	<footer class="py-12 border-t border-border bg-black/5 dark:bg-black/40 mt-auto">
-		<div class="max-w-[1600px] mx-auto px-6 text-center text-[9px] text-muted-foreground font-bold opacity-20">
-			<p>© {new Date().getFullYear()} {title}</p>
-			<p class="mt-2">Powered by Pocket ID</p>
-		</div>
-	</footer>
+    <div class="py-12 text-center text-[9px] text-muted-foreground font-bold opacity-30 mt-auto">
+        <p>© {new Date().getFullYear()} {title}</p>
+        <p class="mt-2">Powered by Pocket ID</p>
+    </div>
 </div>
