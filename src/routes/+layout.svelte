@@ -3,6 +3,8 @@
 	import { LogOut, LayoutGrid, UserCircle } from '@lucide/svelte';
 	import { page } from '$app/state';
 	import { env } from '$env/dynamic/public';
+    import { ModeWatcher } from 'mode-watcher';
+    import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 
 	let { children } = $props();
 
@@ -12,7 +14,9 @@
 	const isAuthenticated = $derived(page.data.user !== undefined && page.data.user !== null);
 </script>
 
-<div class="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased">
+<ModeWatcher />
+
+<div class="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased transition-colors duration-300">
 	<header class="border-b border-border bg-background/50 backdrop-blur-md sticky top-0 z-50">
 		<div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
 			<div class="flex items-center gap-4">
@@ -20,15 +24,17 @@
                     <div class="bg-primary p-1.5 rounded-lg text-white">
                         <LayoutGrid size={16} strokeWidth={3} />
                     </div>
-                    <span class="font-bold text-lg tracking-tight text-white">{title}</span>
+                    <span class="font-bold text-lg tracking-tight">{title}</span>
                 </div>
                 {#if slogan}
-                    <span class="hidden lg:inline text-[10px] italic text-muted-foreground font-medium border-l border-border pl-4 py-1 opacity-50">{slogan}</span>
+                    <span class="hidden lg:inline text-[9px] text-muted-foreground font-semibold border-l border-border pl-4 py-1 uppercase tracking-widest opacity-50">{slogan}</span>
                 {/if}
 			</div>
 
 			<div class="flex items-center gap-3">
 				{#if isAuthenticated}
+                    <ThemeToggle />
+
 					<a 
                         href="{pocketIdUrl}/settings/account" 
                         target="_blank"
@@ -41,11 +47,11 @@
 						{:else}
 							<UserCircle size={12} class="text-primary" />
 						{/if}
-						<span class="text-white">{page.data.user.username}</span>
+						<span class="">{page.data.user.username}</span>
 					</a>
 					<a
 						href="/logout"
-						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-white"
+						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border"
 					>
 						<LogOut size={12} />
 						<span>Logout</span>
@@ -59,7 +65,7 @@
 		{@render children()}
 	</main>
 
-	<footer class="py-12 border-t border-border bg-black/40">
+	<footer class="py-12 border-t border-border bg-black/5 dark:bg-black/40">
 		<div class="max-w-7xl mx-auto px-6 text-center text-[9px] text-muted-foreground font-bold opacity-20">
 			<p>© {new Date().getFullYear()} {title}</p>
 			<p class="mt-2">Powered by Pocket ID</p>

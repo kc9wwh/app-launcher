@@ -10,7 +10,7 @@
         <div class="p-2 rounded-lg bg-primary/10 text-primary">
             <LayoutGrid size={20} />
         </div>
-        <h2 class="text-xl font-bold tracking-tight text-white">My apps</h2>
+        <h2 class="text-xl font-bold tracking-tight text-foreground">My apps</h2>
     </div>
 
 	{#if data.error}
