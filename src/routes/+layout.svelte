@@ -3,8 +3,7 @@
 	import { LogOut, LayoutGrid, UserCircle } from '@lucide/svelte';
 	import { page } from '$app/state';
 	import { env } from '$env/dynamic/public';
-    import { onMount } from 'svelte';
-    import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+	import { onMount } from 'svelte';
 
 	let { children, data } = $props();
 
