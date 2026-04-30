@@ -1,18 +1,30 @@
 <script lang="ts">
 	import { Sun, Moon, Monitor } from '@lucide/svelte';
 	import { setMode, mode } from 'mode-watcher';
-	import { clickOutside } from '$lib/utils/click-outside';
-    import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	let isOpen = $state(false);
     let currentMode = $state('system');
+    let container: HTMLDivElement;
 
     // Manually subscribe to handle Svelte 5 SSR more robustly
     onMount(() => {
         const unsubscribe = mode.subscribe((v) => {
             currentMode = v || 'system';
         });
-        return unsubscribe;
+
+        const handleClick = (e: MouseEvent) => {
+            if (isOpen && container && !container.contains(e.target as Node)) {
+                isOpen = false;
+            }
+        };
+
+        document.addEventListener('click', handleClick);
+        
+        return () => {
+            unsubscribe();
+            document.removeEventListener('click', handleClick);
+        };
     });
 
 	function select(val: any) {
@@ -21,7 +33,7 @@
 	}
 </script>
 
-<div class="relative" use:clickOutside={() => (isOpen = false)}>
+<div class="relative" bind:this={container}>
 	<button
 		onclick={() => (isOpen = !isOpen)}
 		class="flex items-center justify-center size-8 rounded-lg bg-secondary hover:bg-secondary/80 border border-border transition-colors text-foreground"
