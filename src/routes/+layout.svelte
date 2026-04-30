@@ -4,6 +4,8 @@
 	import { page } from '$app/state';
 	import { env } from '$env/dynamic/public';
     import { onMount } from 'svelte';
+    import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+
 	let { children, data } = $props();
 
 	const title = env.PUBLIC_LAUNCHER_TITLE || 'App Launcher';
@@ -17,11 +19,8 @@
     let theme = $state('dark');
 
     onMount(() => {
-        // Load initial theme
         const saved = localStorage.getItem('app-theme');
-        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        
-        theme = saved || 'dark'; // Default to dark as user preferred
+        theme = saved || 'dark';
         applyTheme(theme);
     });
 
@@ -35,13 +34,11 @@
         theme = newTheme;
     }
 
-    // Export a function to toggle theme that child components can use
     function toggleTheme() {
         applyTheme(theme === 'dark' ? 'light' : 'dark');
     }
 </script>
 
-<!-- Inject script to prevent flash -->
 <svelte:head>
     <script>
         (function() {
@@ -57,7 +54,7 @@
 
 <div class="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased">
 	<header class="border-b border-border bg-card sticky top-0 z-50 transition-colors duration-200">
-		<div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+		<div class="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between">
 			<div class="flex items-center gap-4">
 				<div class="flex items-center gap-2">
                     <div class="bg-primary p-1.5 rounded-lg text-white">
@@ -78,7 +75,7 @@
                         title="Toggle theme"
                     >
                         {#if theme === 'dark'}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
                         {:else}
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M22 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
                         {/if}
@@ -88,7 +85,7 @@
                         href="{pocketIdUrl}/settings/account" 
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold hover:bg-secondary/80 transition-colors"
+                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold hover:bg-secondary/80 transition-colors shadow-sm"
                         title="Manage Account"
                     >
 						{#if data.user.picture}
@@ -100,7 +97,7 @@
 					</a>
 					<a
 						href="/logout"
-						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border"
+						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-white"
 					>
 						<LogOut size={12} />
 						<span>Logout</span>
@@ -115,7 +112,7 @@
 	</main>
 
 	<footer class="py-12 border-t border-border bg-black/5 dark:bg-black/40 mt-auto">
-		<div class="max-w-7xl mx-auto px-6 text-center text-[9px] text-muted-foreground font-bold opacity-20">
+		<div class="max-w-[1600px] mx-auto px-6 text-center text-[9px] text-muted-foreground font-bold opacity-20">
 			<p>© {new Date().getFullYear()} {title}</p>
 			<p class="mt-2">Powered by Pocket ID</p>
 		</div>

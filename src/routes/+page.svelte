@@ -5,7 +5,7 @@
 	let { data } = $props();
 </script>
 
-<div class="max-w-7xl mx-auto px-6 py-8">
+<div class="max-w-[1600px] mx-auto px-6 py-8 w-full">
     <div class="flex items-center gap-3 mb-8">
         <div class="p-2 rounded-lg bg-primary/10 text-primary">
             <LayoutGrid size={20} />
@@ -23,7 +23,7 @@
 		</div>
 	{/if}
 
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+	<div class="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-6">
 		{#each data.apps as app}
 			<AppCard {app} />
 		{:else}
