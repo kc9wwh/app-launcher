@@ -2,14 +2,18 @@
 	import { Sun, Moon, Monitor } from '@lucide/svelte';
 	import { setMode, mode } from 'mode-watcher';
 	import { clickOutside } from '$lib/utils/click-outside';
+    import { onMount } from 'svelte';
 
 	let isOpen = $state(false);
+    let currentMode = $state('system');
 
-	const options = [
-		{ label: 'Light', value: 'light', icon: Sun },
-		{ label: 'Dark', value: 'dark', icon: Moon },
-		{ label: 'System', value: 'system', icon: 'system' }
-	];
+    // Manually subscribe to handle Svelte 5 SSR more robustly
+    onMount(() => {
+        const unsubscribe = mode.subscribe((v) => {
+            currentMode = v || 'system';
+        });
+        return unsubscribe;
+    });
 
 	function select(val: any) {
 		setMode(val === 'system' ? undefined : val);
@@ -23,9 +27,9 @@
 		class="flex items-center justify-center size-8 rounded-lg bg-secondary hover:bg-secondary/80 border border-border transition-colors text-foreground"
 		title="Toggle theme"
 	>
-		{#if $mode === 'dark'}
+		{#if currentMode === 'dark'}
 			<Moon size={14} />
-		{:else if $mode === 'light'}
+		{:else if currentMode === 'light'}
 			<Sun size={14} />
 		{:else}
 			<Monitor size={14} />
@@ -38,7 +42,7 @@
 		>
 			<button
 				onclick={() => select('light')}
-				class="w-full flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold hover:bg-secondary transition-colors {$mode ===
+				class="w-full flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold hover:bg-secondary transition-colors {currentMode ===
 				'light'
 					? 'text-primary'
 					: 'text-foreground'}"
@@ -48,7 +52,7 @@
 			</button>
 			<button
 				onclick={() => select('dark')}
-				class="w-full flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold hover:bg-secondary transition-colors {$mode ===
+				class="w-full flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold hover:bg-secondary transition-colors {currentMode ===
 				'dark'
 					? 'text-primary'
 					: 'text-foreground'}"
@@ -58,8 +62,8 @@
 			</button>
 			<button
 				onclick={() => select('system')}
-				class="w-full flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold hover:bg-secondary transition-colors {$mode ===
-				undefined
+				class="w-full flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold hover:bg-secondary transition-colors {currentMode ===
+				'system'
 					? 'text-primary'
 					: 'text-foreground'}"
 			>
