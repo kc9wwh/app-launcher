@@ -67,7 +67,7 @@
 			</div>
 
 			<div class="flex items-center gap-3">
-				{#if isAuthenticated}
+				{#if data.user}
                     <button
                         onclick={toggleTheme}
                         class="flex items-center justify-center size-8 rounded-lg bg-secondary hover:bg-secondary/80 border border-border transition-colors text-foreground shadow-sm active:scale-90"
@@ -94,13 +94,15 @@
 						{/if}
 						<span class="">{displayName}</span>
 					</a>
-					<a
-						href="/logout"
-						class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-white"
-					>
-						<LogOut size={12} />
-						<span>Logout</span>
-					</a>
+					<form action="/logout" method="POST" class="flex">
+						<button
+							type="submit"
+							class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-white"
+						>
+							<LogOut size={12} />
+							<span>Logout</span>
+						</button>
+					</form>
 				{/if}
 			</div>
 		</div>
