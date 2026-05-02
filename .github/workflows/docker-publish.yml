@@ -3,7 +3,7 @@ name: Build and Publish Docker Image
 on:
   push:
     branches:
-      - main
+      - '**'
   workflow_dispatch:
 
 env:
@@ -37,6 +37,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=beta,enable=${{ github.ref != 'refs/heads/main' }}
+            type=ref,event=branch
             type=sha
 
       - name: Build and push Docker image

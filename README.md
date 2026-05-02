@@ -39,6 +39,7 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 | `POCKET_ID_API_KEY` | **Required** | The API Token from step 1B | `pid_xxxx...` |
 | `OIDC_CLIENT_ID` | **Required** | Client ID from step 1A | `...` |
 | `OIDC_CLIENT_SECRET` | **Required** | Client Secret from step 1A | `...` |
+| `AUTH_SECRET` | **Required** | Secret for signing session cookies | `(Run: openssl rand -hex 32)` |
 | `PUBLIC_APP_URL` | **Required** | The public URL of this launcher | `https://launcher.example.com` |
 | `PUBLIC_LAUNCHER_TITLE` | Optional | Custom title shown in header | `Family Apps` |
 | `PUBLIC_LAUNCHER_DESCRIPTION` | Optional | Custom welcome message | `Access our services below` |

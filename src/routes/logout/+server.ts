@@ -3,7 +3,7 @@ import { PocketIDService } from '$lib/server/pocket-id';
 import { env } from '$env/dynamic/public';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async ({ cookies, locals }) => {
+export const POST: RequestHandler = async ({ cookies, locals }) => {
     const username = locals.user?.username || 'unknown';
 	cookies.delete('session', { path: '/' });
 

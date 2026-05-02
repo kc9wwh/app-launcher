@@ -1,17 +1,45 @@
 import type { Handle } from '@sveltejs/kit';
 import { logger } from '$lib/server/logger';
+import { env } from '$env/dynamic/private';
+import crypto from 'node:crypto';
 
 export const handle: Handle = async ({ event, resolve }) => {
     const start = performance.now();
     const { request, url, getClientAddress, cookies } = event;
     
-    // Extract session for logging (safe version)
-    const session = cookies.get('session');
-    if (session) {
+    // Extract and verify session
+    const sessionCookie = cookies.get('session');
+    if (sessionCookie) {
         try {
-            event.locals.user = JSON.parse(session);
-            event.locals.isAuthenticated = true;
+            const lastDotIndex = sessionCookie.lastIndexOf('.');
+            if (lastDotIndex !== -1) {
+                const sessionData = sessionCookie.substring(0, lastDotIndex);
+                const signature = sessionCookie.substring(lastDotIndex + 1);
+
+                const expectedSignature = crypto
+                    .createHmac('sha256', env.AUTH_SECRET || '')
+                    .update(sessionData)
+                    .digest();
+
+                const signatureBuffer = Buffer.from(signature, 'hex');
+
+                if (env.AUTH_SECRET && signatureBuffer.length === expectedSignature.length && crypto.timingSafeEqual(signatureBuffer, expectedSignature)) {
+                    event.locals.user = JSON.parse(sessionData);
+                    event.locals.isAuthenticated = true;
+                } else {
+                    logger.warn({ 
+                        event: 'session_verification_failed',
+                        has_secret: !!env.AUTH_SECRET 
+                    }, 'Invalid session signature or missing AUTH_SECRET');
+                    event.locals.user = null;
+                    event.locals.isAuthenticated = false;
+                }
+            } else {
+                event.locals.user = null;
+                event.locals.isAuthenticated = false;
+            }
         } catch (e) {
+            logger.error({ event: 'session_parse_error', error: (e as Error).message }, 'Failed to parse session cookie');
             event.locals.user = null;
             event.locals.isAuthenticated = false;
         }
