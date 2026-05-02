@@ -19,9 +19,11 @@ export const handle: Handle = async ({ event, resolve }) => {
                 const expectedSignature = crypto
                     .createHmac('sha256', env.AUTH_SECRET || '')
                     .update(sessionData)
-                    .digest('hex');
+                    .digest();
 
-                if (signature === expectedSignature && env.AUTH_SECRET) {
+                const signatureBuffer = Buffer.from(signature, 'hex');
+
+                if (env.AUTH_SECRET && signatureBuffer.length === expectedSignature.length && crypto.timingSafeEqual(signatureBuffer, expectedSignature)) {
                     event.locals.user = JSON.parse(sessionData);
                     event.locals.isAuthenticated = true;
                 } else {
