@@ -1,6 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 import { logger } from '$lib/server/logger';
 import { env } from '$env/dynamic/private';
+import crypto from 'node:crypto';
 
 export const handle: Handle = async ({ event, resolve }) => {
     const start = performance.now();
@@ -15,7 +16,6 @@ export const handle: Handle = async ({ event, resolve }) => {
                 const sessionData = sessionCookie.substring(0, lastDotIndex);
                 const signature = sessionCookie.substring(lastDotIndex + 1);
 
-                const crypto = await import('node:crypto');
                 const expectedSignature = crypto
                     .createHmac('sha256', env.AUTH_SECRET || '')
                     .update(sessionData)

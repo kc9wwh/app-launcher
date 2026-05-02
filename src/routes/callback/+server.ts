@@ -3,6 +3,8 @@ import { PocketIDService } from '$lib/server/pocket-id';
 import { env } from '$env/dynamic/private';
 import * as oidc from 'openid-client';
 import type { RequestHandler } from './$types';
+import { logger } from '$lib/server/logger';
+import crypto from 'node:crypto';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
 	const config = await PocketIDService.getConfig();
@@ -36,14 +38,12 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
     // Sign the session cookie to prevent spoofing
     const sessionData = JSON.stringify(user);
-    const { logger } = await import('$lib/server/logger');
     
     if (!env.AUTH_SECRET) {
         logger.error('AUTH_SECRET is not set. Session cookies cannot be signed securely.');
         throw error(500, 'Server configuration error');
     }
 
-    const crypto = await import('node:crypto');
     const signature = crypto.createHmac('sha256', env.AUTH_SECRET).update(sessionData).digest('hex');
     const cookieValue = `${sessionData}.${signature}`;
 
