@@ -45,6 +45,8 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 | `PUBLIC_LAUNCHER_DESCRIPTION` | Optional | Custom welcome message | `Access our services below` |
 | `CUSTOM_LOGO_DARK` | Optional | Logo for dark theme (URL or local path) | `/app/logo-dark.png` |
 | `CUSTOM_LOGO_LIGHT` | Optional | Logo for light theme (URL or local path) | `/app/logo-light.png` |
+| `UPTIME_KUMA_URL` | Optional | Public URL of your Uptime Kuma instance | `status.example.com` |
+| `UPTIME_KUMA_SLUG` | Optional | The 'Slug' from Status Page settings | `default` |
 | `LOG_LEVEL` | Optional | Logging verbosity (debug, info, warn, error) | `info` |
 | `LOG_PATH` | Optional | Path for persistent JSON log file | `/app/logs/launcher.log` |
 
@@ -93,6 +95,20 @@ services:
 If using a Cloudflare Tunnel:
 1. Point your public hostname (e.g., `launcher.example.com`) to the local IP and port of this container (e.g., `http://192.168.1.10:3000`).
 2. Ensure your `PUBLIC_APP_URL` matches the Cloudflare hostname exactly.
+
+### 3. Global Health Header (Optional)
+To enable the health status pill in the header, integrate it with an Uptime Kuma Status Page.
+
+#### Finding your Slug
+1. Log in to your **Uptime Kuma** instance.
+2. Navigate to **Status Pages** in the top menu.
+3. Select your desired status page and click **Edit**.
+4. The **Slug** is found in the 'Slug' field (e.g., `default` or `main`). This corresponds to the URL path: `your-kuma-url.com/status/slug`.
+
+#### Security & Cloudflare Tunnels
+If your Uptime Kuma instance is behind a Cloudflare Tunnel, the launcher requires client-side access to the Heartbeat API.
+- **CORS Configuration**: You must handle CORS if the launcher and Uptime Kuma are on different domains. In Cloudflare, create a **Response Header Transform Rule** to add `Access-Control-Allow-Origin` for your launcher's domain.
+- **WebSocket Enablement**: While the status pill uses the JSON Heartbeat API, ensure WebSockets are enabled in your Cloudflare Tunnel settings if you plan to use other Uptime Kuma features that depend on them.
 
 ---
 

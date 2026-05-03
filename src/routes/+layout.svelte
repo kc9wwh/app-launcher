@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import { env } from '$env/dynamic/public';
 	import { onMount } from 'svelte';
+	import StatusHeader from '$lib/components/StatusHeader.svelte';
 
 	let { children, data } = $props();
 
@@ -87,6 +88,7 @@
 
 			<div class="flex items-center gap-3">
 				{#if data.user}
+                    <StatusHeader />
                     <button
                         onclick={toggleTheme}
                         class="flex items-center justify-center size-8 rounded-lg bg-secondary hover:bg-secondary/80 border border-border transition-colors text-foreground shadow-sm active:scale-90"
