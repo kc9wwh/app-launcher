@@ -3,9 +3,6 @@ import type { LayoutServerLoad } from './$types';
 import { logger } from '$lib/server/logger';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
-    const kumaUrl = env.UPTIME_KUMA_URL;
-    const kumaSlug = env.UPTIME_KUMA_SLUG;
-
     const getLogoUrl = (logoPath: string | undefined, type: string) => {
         if (!logoPath) return null;
         if (logoPath.startsWith('http://') || logoPath.startsWith('https://')) {
