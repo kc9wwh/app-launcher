@@ -43,6 +43,7 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 | `PUBLIC_APP_URL` | **Required** | The public URL of this launcher | `https://launcher.example.com` |
 | `PUBLIC_LAUNCHER_TITLE` | Optional | Custom title shown in header | `Family Apps` |
 | `PUBLIC_LAUNCHER_DESCRIPTION` | Optional | Custom welcome message | `Access our services below` |
+| `CUSTOM_LOGO` | Optional | URL or local path for a custom logo | `https://example.com/logo.png` or `/app/logo.png` |
 | `LOG_LEVEL` | Optional | Logging verbosity (debug, info, warn, error) | `info` |
 | `LOG_PATH` | Optional | Path for persistent JSON log file | `/app/logs/launcher.log` |
 
@@ -62,6 +63,28 @@ Before deploying the launcher, you need to configure two things in your Pocket I
     - **Host Path:** `/mnt/user/appdata/app-launcher/`
     - **Access Mode:** Read/Write
 8. **Environment Variables:** Add the variables listed above. 
+
+### Docker Compose
+```yaml
+services:
+  app-launcher:
+    image: ghcr.io/kc9wwh/app-launcher:latest
+    container_name: app-launcher
+    ports:
+      - "3000:3000"
+    environment:
+      - POCKET_ID_URL=https://auth.example.com
+      - POCKET_ID_API_KEY=pid_xxxx...
+      - OIDC_CLIENT_ID=...
+      - OIDC_CLIENT_SECRET=...
+      - AUTH_SECRET=...
+      - PUBLIC_APP_URL=https://launcher.example.com
+      - CUSTOM_LOGO=/app/logo.png # Optional: Local path or URL
+    volumes:
+      - /path/to/logs:/app/logs
+      - /path/to/logo.png:/app/logo.png:ro # Optional: Mount local logo
+    restart: unless-stopped
+```
 
 ### Cloudflare Tunnel
 If using a Cloudflare Tunnel:
