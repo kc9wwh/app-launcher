@@ -36,6 +36,16 @@
     function toggleTheme() {
         applyTheme(theme === 'dark' ? 'light' : 'dark');
     }
+
+    let logoError = $state(false);
+    const customLogoUrl = $derived(theme === 'dark' ? data.customLogoDark : data.customLogoLight);
+
+    $effect(() => {
+        // Reset logo error when URL changes
+        if (customLogoUrl) {
+            logoError = false;
+        }
+    });
 </script>
 
 <svelte:head>
@@ -56,9 +66,18 @@
 		<div class="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between">
 			<div class="flex items-center gap-4">
 				<div class="flex items-center gap-2">
-                    <div class="bg-primary p-1.5 rounded-lg text-white">
-                        <LayoutGrid size={16} strokeWidth={3} />
-                    </div>
+                    {#if customLogoUrl && !logoError}
+                        <img 
+                            src={customLogoUrl} 
+                            alt="Logo" 
+                            class="size-7 object-contain rounded-lg" 
+                            onerror={() => logoError = true}
+                        />
+                    {:else}
+                        <div class="bg-primary p-1.5 rounded-lg text-white">
+                            <LayoutGrid size={16} strokeWidth={3} />
+                        </div>
+                    {/if}
                     <span class="font-bold text-lg tracking-tight">{title}</span>
                 </div>
                 {#if slogan}
