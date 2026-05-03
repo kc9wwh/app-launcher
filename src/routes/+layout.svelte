@@ -38,6 +38,14 @@
     }
 
     let logoError = $state(false);
+    const customLogoUrl = $derived(theme === 'dark' ? data.customLogoDark : data.customLogoLight);
+
+    $effect(() => {
+        // Reset logo error when URL changes
+        if (customLogoUrl) {
+            logoError = false;
+        }
+    });
 </script>
 
 <svelte:head>
@@ -58,9 +66,9 @@
 		<div class="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between">
 			<div class="flex items-center gap-4">
 				<div class="flex items-center gap-2">
-                    {#if data.customLogoUrl && !logoError}
+                    {#if customLogoUrl && !logoError}
                         <img 
-                            src={data.customLogoUrl} 
+                            src={customLogoUrl} 
                             alt="Logo" 
                             class="size-7 object-contain rounded-lg bg-primary/10" 
                             onerror={() => logoError = true}

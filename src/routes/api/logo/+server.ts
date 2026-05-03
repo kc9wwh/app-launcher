@@ -16,8 +16,15 @@ const CONTENT_TYPES: Record<string, string> = {
 
 const MAX_LOGO_SIZE = 5 * 1024 * 1024; // 5MB limit
 
-export const GET: RequestHandler = async () => {
-    const customLogo = env.CUSTOM_LOGO;
+export const GET: RequestHandler = async ({ url }) => {
+    const type = url.searchParams.get('type');
+    let customLogo = env.CUSTOM_LOGO;
+
+    if (type === 'dark') {
+        customLogo = env.CUSTOM_LOGO_DARK || env.CUSTOM_LOGO;
+    } else if (type === 'light') {
+        customLogo = env.CUSTOM_LOGO_LIGHT || env.CUSTOM_LOGO;
+    }
 
     if (!customLogo || customLogo.startsWith('http://') || customLogo.startsWith('https://')) {
         throw error(404, 'Not Found');

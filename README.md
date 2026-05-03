@@ -43,7 +43,8 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 | `PUBLIC_APP_URL` | **Required** | The public URL of this launcher | `https://launcher.example.com` |
 | `PUBLIC_LAUNCHER_TITLE` | Optional | Custom title shown in header | `Family Apps` |
 | `PUBLIC_LAUNCHER_DESCRIPTION` | Optional | Custom welcome message | `Access our services below` |
-| `CUSTOM_LOGO` | Optional | URL or local path for a custom logo (Max 5MB for local files) | `https://example.com/logo.png` or `/app/logo.png` |
+| `CUSTOM_LOGO_DARK` | Optional | Logo for dark theme (URL or local path) | `/app/logo-dark.png` |
+| `CUSTOM_LOGO_LIGHT` | Optional | Logo for light theme (URL or local path) | `/app/logo-light.png` |
 | `LOG_LEVEL` | Optional | Logging verbosity (debug, info, warn, error) | `info` |
 | `LOG_PATH` | Optional | Path for persistent JSON log file | `/app/logs/launcher.log` |
 
@@ -79,10 +80,12 @@ services:
       - OIDC_CLIENT_SECRET=...
       - AUTH_SECRET=...
       - PUBLIC_APP_URL=https://launcher.example.com
-      - CUSTOM_LOGO=/app/logo.png # Optional: Local path or URL (Max 5MB for local)
+      - CUSTOM_LOGO_DARK=/app/logo-dark.png # Optional: Theme specific logos
+      - CUSTOM_LOGO_LIGHT=/app/logo-light.png
     volumes:
       - /path/to/logs:/app/logs
-      - /path/to/logo.png:/app/logo.png:ro # Optional: Mount local logo
+      - /path/to/logo-dark.png:/app/logo-dark.png:ro
+      - /path/to/logo-light.png:/app/logo-light.png:ro
     restart: unless-stopped
 ```
 

@@ -2,23 +2,26 @@ import { env } from '$env/dynamic/private';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
-    let customLogoUrl = null;
-    if (env.CUSTOM_LOGO) {
-        if (env.CUSTOM_LOGO.startsWith('http://') || env.CUSTOM_LOGO.startsWith('https://')) {
+    const getLogoUrl = (logoPath: string | undefined, type: string) => {
+        if (!logoPath) return null;
+        if (logoPath.startsWith('http://') || logoPath.startsWith('https://')) {
             try {
-                new URL(env.CUSTOM_LOGO);
-                customLogoUrl = env.CUSTOM_LOGO;
+                new URL(logoPath);
+                return logoPath;
             } catch (e) {
-                // Invalid URL, fallback to default
+                return null;
             }
-        } else {
-            customLogoUrl = '/api/logo';
         }
-    }
+        return `/api/logo?type=${type}`;
+    };
+
+    const customLogoDark = getLogoUrl(env.CUSTOM_LOGO_DARK || env.CUSTOM_LOGO, 'dark');
+    const customLogoLight = getLogoUrl(env.CUSTOM_LOGO_LIGHT || env.CUSTOM_LOGO, 'light');
 
 	return {
 		user: locals.user,
         pocketIdUrl: env.POCKET_ID_URL,
-        customLogoUrl
+        customLogoDark,
+        customLogoLight
 	};
 };
