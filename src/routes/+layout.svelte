@@ -70,7 +70,7 @@
                         <img 
                             src={customLogoUrl} 
                             alt="Logo" 
-                            class="size-7 object-contain rounded-lg bg-primary/10" 
+                            class="size-7 object-contain rounded-lg" 
                             onerror={() => logoError = true}
                         />
                     {:else}
