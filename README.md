@@ -110,6 +110,17 @@ If your Uptime Kuma instance is behind a Cloudflare Tunnel, the launcher require
 - **CORS Configuration**: You must handle CORS if the launcher and Uptime Kuma are on different domains. In Cloudflare, create a **Response Header Transform Rule** to add `Access-Control-Allow-Origin` for your launcher's domain.
 - **WebSocket Enablement**: While the status pill uses the JSON Heartbeat API, ensure WebSockets are enabled in your Cloudflare Tunnel settings if you plan to use other Uptime Kuma features that depend on them.
 
+#### Troubleshooting & Debugging
+If the health pill is not appearing or showing 'Status Unknown':
+
+1. **Check Server Logs**: Look at your Docker/container logs. Upon page load, the server logs its configuration status:
+   - `kuma_integration_active`: Config is correctly detected and passed to the client.
+   - `kuma_integration_inactive`: One or both environment variables are missing.
+2. **Check Browser Console**: Open your browser's Developer Tools (`F12`) and check the **Console**:
+   - Look for `Starting health status polling: [URL]`. Verify this URL is reachable from your browser.
+   - Check for `Status fetch error`. This often indicates a **CORS** issue if the domains differ.
+3. **Verify Slug**: Ensure your `UPTIME_KUMA_SLUG` matches the 'Slug' in Uptime Kuma, **not** the page title.
+
 ---
 
 ## 🛠️ Local Development

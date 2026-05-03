@@ -18,6 +18,7 @@
     
     const baseKumaUrl = $derived(kumaUrl?.startsWith('http') ? kumaUrl : `https://${kumaUrl}`);
     const endpoint = $derived(kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/api/status-page/heartbeat/${kumaSlug}` : null);
+    const statusPageUrl = $derived(kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/status/${kumaSlug}` : null);
 
     async function fetchStatus() {
         if (!endpoint) return;
@@ -160,13 +161,18 @@
 
 {#if endpoint}
 <div class="relative group flex items-center">
-    <div class={cn(
-        "flex items-center gap-2 px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all shadow-sm cursor-default",
-        statusConfig.color
-    )}>
+    <a 
+        href={statusPageUrl} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class={cn(
+            "flex items-center gap-2 px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all shadow-sm active:scale-95 hover:brightness-95 dark:hover:brightness-110",
+            statusConfig.color
+        )}
+    >
         <div class={cn("size-1.5 rounded-full", statusConfig.dot)}></div>
         <span>{statusConfig.label}</span>
-    </div>
+    </a>
 
     <!-- Tooltip -->
     <div class="absolute top-full right-0 mt-2 w-64 p-3 bg-card border border-border rounded-xl shadow-xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 z-[100] text-foreground">
@@ -188,7 +194,7 @@
         {/if}
         
         <div class="mt-3 pt-2 border-t border-border flex items-center justify-between text-[8px] font-bold text-muted-foreground/40 uppercase tracking-widest">
-            <span>Uptime Kuma</span>
+            <span class="opacity-70">Click to view details</span>
             <span>Every 60s</span>
         </div>
     </div>
