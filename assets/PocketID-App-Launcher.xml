@@ -14,7 +14,7 @@
   <Overview>A clean, simple, and aesthetically pleasing application launcher designed for families and friends. It integrates directly with your self-hosted Pocket ID instance to fetch applications and handle authentication.</Overview>
   <Category>Productivity: Security: Tools: Other: Status:Stable</Category>
   <WebUI>http://[IP]:[PORT:3000]</WebUI>
-  <TemplateURL/>
+  <TemplateURL>https://raw.githubusercontent.com/kc9wwh/app-launcher/refs/heads/main/assets/PocketID-App-Launcher.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/kc9wwh/app-launcher/refs/heads/main/static/favicon.png</Icon>
   <ExtraParams/>
   <PostArgs/>
