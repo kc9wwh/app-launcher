@@ -7,15 +7,17 @@
         return twMerge(clsx(inputs));
     }
 
+    let { config } = $props<{ config: { url?: string, slug?: string } }>();
+
     let statusData = $state<Record<string, any> | null>(null);
     let error = $state(false);
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
-    const kumaUrl = import.meta.env.UPTIME_KUMA_URL;
-    const kumaSlug = import.meta.env.UPTIME_KUMA_SLUG;
+    const kumaUrl = $derived(config?.url);
+    const kumaSlug = $derived(config?.slug);
     
-    const baseKumaUrl = kumaUrl?.startsWith('http') ? kumaUrl : `https://${kumaUrl}`;
-    const endpoint = kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/api/status-page/heartbeat/${kumaSlug}` : null;
+    const baseKumaUrl = $derived(kumaUrl?.startsWith('http') ? kumaUrl : `https://${kumaUrl}`);
+    const endpoint = $derived(kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/api/status-page/heartbeat/${kumaSlug}` : null);
 
     async function fetchStatus() {
         if (!endpoint) return;
@@ -32,6 +34,7 @@
 
     function startPolling() {
         if (!intervalId && endpoint) {
+            console.log('Starting health status polling:', endpoint);
             fetchStatus();
             intervalId = setInterval(fetchStatus, 60000);
         }

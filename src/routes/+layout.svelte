@@ -88,7 +88,7 @@
 
 			<div class="flex items-center gap-3">
 				{#if data.user}
-                    <StatusHeader />
+                    <StatusHeader config={data.kumaConfig} />
                     <button
                         onclick={toggleTheme}
                         class="flex items-center justify-center size-8 rounded-lg bg-secondary hover:bg-secondary/80 border border-border transition-colors text-foreground shadow-sm active:scale-90"

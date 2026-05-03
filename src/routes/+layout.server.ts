@@ -22,6 +22,10 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		user: locals.user,
         pocketIdUrl: env.POCKET_ID_URL,
         customLogoDark,
-        customLogoLight
+        customLogoLight,
+        kumaConfig: {
+            url: env.UPTIME_KUMA_URL,
+            slug: env.UPTIME_KUMA_SLUG
+        }
 	};
 };
