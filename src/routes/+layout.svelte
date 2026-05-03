@@ -63,7 +63,7 @@
 </svelte:head>
 
 <div class="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased">
-	<header class="border-b border-border bg-card sticky top-0 z-50 transition-colors duration-200">
+	<header class="border-b border-border bg-card sticky top-0 z-50">
 		<div class="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between">
 			<div class="flex items-center gap-4">
 				<div class="flex items-center gap-2">
@@ -105,7 +105,7 @@
                         href="{pocketIdUrl}/settings/account" 
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold hover:bg-secondary/80 transition-colors shadow-sm"
+                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-[10px] font-bold text-foreground hover:bg-secondary/80 transition-colors shadow-sm"
                         title="Manage Account"
                     >
 						{#if data.user.picture}
@@ -118,7 +118,7 @@
 					<form action="/logout" method="POST" class="flex">
 						<button
 							type="submit"
-							class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-white"
+							class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-foreground"
 						>
 							<LogOut size={12} />
 							<span>Logout</span>
