@@ -89,6 +89,7 @@
         
         const heartbeats = statusData.heartbeatList || {};
         const monitors = statusData.monitorList || [];
+        const monitorMap = new Map(monitors.map((m: any) => [m.id, m]));
         
         let worstStatus = 1;
         const statusPriority: Record<number, number> = { 0: 4, 3: 3, 2: 2, 1: 1 };
@@ -105,7 +106,7 @@
                 }
                 
                 if (status !== 1) {
-                    const monitor = monitors.find((m: any) => m.id === parseInt(monitorId));
+                    const monitor: any = monitorMap.get(Number(monitorId));
                     affected.push({
                         name: monitor?.name || `Service ${monitorId}`,
                         status,

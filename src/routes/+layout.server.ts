@@ -6,20 +6,6 @@ export const load: LayoutServerLoad = async ({ locals }) => {
     const kumaUrl = env.UPTIME_KUMA_URL;
     const kumaSlug = env.UPTIME_KUMA_SLUG;
 
-    if (kumaUrl && kumaSlug) {
-        logger.info({ 
-            event: 'kuma_integration_active', 
-            url: kumaUrl, 
-            slug: kumaSlug 
-        }, 'Uptime Kuma health integration is active');
-    } else {
-        logger.warn({ 
-            event: 'kuma_integration_inactive',
-            has_url: !!kumaUrl,
-            has_slug: !!kumaSlug
-        }, 'Uptime Kuma health integration is disabled (missing URL or Slug)');
-    }
-
     const getLogoUrl = (logoPath: string | undefined, type: string) => {
         if (!logoPath) return null;
         if (logoPath.startsWith('http://') || logoPath.startsWith('https://')) {
