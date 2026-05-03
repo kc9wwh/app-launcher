@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>PocketID-App-Launcher</Name>
+  <Repository>ghcr.io/kc9wwh/app-launcher:latest</Repository>
+  <Registry>https://github.com/kc9wwh/app-launcher</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <MyMAC/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project>https://github.com/kc9wwh/app-launcher</Project>
+  <ReadMe>https://github.com/kc9wwh/app-launcher/blob/main/README.md</ReadMe>
+  <Overview>A clean, simple, and aesthetically pleasing application launcher designed for families and friends. It integrates directly with your self-hosted Pocket ID instance to fetch applications and handle authentication.</Overview>
+  <Category>Productivity: Security: Tools: Other: Status:Stable</Category>
+  <WebUI>http://[IP]:[PORT:3000]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/kc9wwh/app-launcher/refs/heads/main/assets/PocketID-App-Launcher.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/kc9wwh/app-launcher/refs/heads/main/static/favicon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1777846953</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>Pocket ID</Requires>
+  <Config Name="HTTP Port" Target="3000" Default="3000" Mode="tcp" Description="" Type="Port" Display="always" Required="true" Mask="false">3000</Config>
+  <Config Name="POCKET_ID_URL" Target="POCKET_ID_URL" Default="" Mode="" Description="" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="POCKET_ID_API_KEY" Target="POCKET_ID_API_KEY" Default="" Mode="" Description="" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="OIDC_CLIENT_ID" Target="OIDC_CLIENT_ID" Default="" Mode="" Description="" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="OIDC_CLIENT_SECRET" Target="OIDC_CLIENT_SECRET" Default="" Mode="" Description="" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="PUBLIC_APP_URL" Target="PUBLIC_APP_URL" Default="" Mode="" Description="The public URL of this launcher" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="AUTH_SECRET" Target="AUTH_SECRET" Default="" Mode="" Description="Execute: openssl rand -hex 32" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="CUSTOM_LOGO" Target="CUSTOM_LOGO" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="CUSTOM_LOGO_DARK" Target="CUSTOM_LOGO_DARK" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="CUSTOM_LOGO_LIGHT" Target="CUSTOM_LOGO_LIGHT" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="Host Path" Target="/app/logs/" Default="" Mode="rw" Description="Path for persistent logs" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/app-launcher/</Config>
+  <Config Name="UPTIME_KUMA_URL" Target="UPTIME_KUMA_URL" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="UPTIME_KUMA_SLUG" Target="UPTIME_KUMA_SLUG" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="PUBLIC_LAUNCHER_TITLE" Target="PUBLIC_LAUNCHER_TITLE" Default="" Mode="" Description="" Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <TailscaleStateDir/>
+</Container>
