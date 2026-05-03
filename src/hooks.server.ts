@@ -3,6 +3,23 @@ import { logger } from '$lib/server/logger';
 import { env } from '$env/dynamic/private';
 import crypto from 'node:crypto';
 
+// One-time startup check for Uptime Kuma integration
+const kumaUrl = env.UPTIME_KUMA_URL;
+const kumaSlug = env.UPTIME_KUMA_SLUG;
+if (kumaUrl && kumaSlug) {
+    logger.info({ 
+        event: 'kuma_integration_active', 
+        url: kumaUrl, 
+        slug: kumaSlug 
+    }, 'Uptime Kuma health integration is active');
+} else {
+    logger.debug({ 
+        event: 'kuma_integration_inactive',
+        has_url: !!kumaUrl,
+        has_slug: !!kumaSlug
+    }, 'Uptime Kuma health integration is disabled');
+}
+
 export const handle: Handle = async ({ event, resolve }) => {
     const start = performance.now();
     const { request, url, getClientAddress, cookies } = event;

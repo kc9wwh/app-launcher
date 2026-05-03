@@ -1,5 +1,6 @@
 import { env } from '$env/dynamic/private';
 import type { LayoutServerLoad } from './$types';
+import { logger } from '$lib/server/logger';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
     const getLogoUrl = (logoPath: string | undefined, type: string) => {
@@ -22,6 +23,10 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		user: locals.user,
         pocketIdUrl: env.POCKET_ID_URL,
         customLogoDark,
-        customLogoLight
+        customLogoLight,
+        kumaConfig: {
+            url: env.UPTIME_KUMA_URL,
+            slug: env.UPTIME_KUMA_SLUG
+        }
 	};
 };
