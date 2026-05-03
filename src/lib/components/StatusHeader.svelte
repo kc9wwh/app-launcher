@@ -7,13 +7,15 @@
         return twMerge(clsx(inputs));
     }
 
-    let statusData = $state<any>(null);
+    let statusData = $state<Record<string, any> | null>(null);
     let error = $state(false);
-    let intervalId: any = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
     const kumaUrl = import.meta.env.UPTIME_KUMA_URL;
     const kumaSlug = import.meta.env.UPTIME_KUMA_SLUG;
-    const endpoint = kumaUrl && kumaSlug ? `https://${kumaUrl}/api/status-page/heartbeat/${kumaSlug}` : null;
+    
+    const baseKumaUrl = kumaUrl?.startsWith('http') ? kumaUrl : `https://${kumaUrl}`;
+    const endpoint = kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/api/status-page/heartbeat/${kumaSlug}` : null;
 
     async function fetchStatus() {
         if (!endpoint) return;
@@ -65,7 +67,9 @@
 
     function calculateDuration(timestamp: string) {
         if (!timestamp) return '...';
-        const diff = Date.now() - new Date(timestamp).getTime();
+        const date = new Date(timestamp);
+        if (isNaN(date.getTime())) return '...';
+        const diff = Date.now() - date.getTime();
         const minutes = Math.floor(diff / 60000);
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
