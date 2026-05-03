@@ -14,6 +14,8 @@ const CONTENT_TYPES: Record<string, string> = {
     '.webp': 'image/webp'
 };
 
+const MAX_LOGO_SIZE = 5 * 1024 * 1024; // 5MB limit
+
 export const GET: RequestHandler = async () => {
     const customLogo = env.CUSTOM_LOGO;
 
@@ -29,6 +31,12 @@ export const GET: RequestHandler = async () => {
             throw error(404, 'Invalid format');
         }
 
+        const stats = await fs.stat(customLogo);
+        if (stats.size > MAX_LOGO_SIZE) {
+            logger.error({ event: 'custom_logo_too_large', path: customLogo, size: stats.size }, 'Custom logo exceeds size limit');
+            throw error(404, 'File too large');
+        }
+
         const buffer = await fs.readFile(customLogo);
         
         return new Response(buffer, {
@@ -40,8 +48,9 @@ export const GET: RequestHandler = async () => {
             }
         });
     } catch (e: any) {
-        if (e.status !== 404) {
-            logger.error({ event: 'custom_logo_read_failed', path: customLogo, error: e.message }, 'Failed to read custom logo file');
+        const isExpectedError = e.status === 404 || e.code === 'ENOENT';
+        if (!isExpectedError) {
+            logger.error({ event: 'custom_logo_read_failed', path: customLogo, error: e.message, code: e.code }, 'Failed to read custom logo file');
         }
         throw error(404, 'File not found');
     }
