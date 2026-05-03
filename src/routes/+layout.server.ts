@@ -1,6 +1,5 @@
 import { env } from '$env/dynamic/private';
 import type { LayoutServerLoad } from './$types';
-import { logger } from '$lib/server/logger';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
     const getLogoUrl = (logoPath: string | undefined, type: string) => {

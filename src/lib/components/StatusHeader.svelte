@@ -9,7 +9,22 @@
 
     let { config } = $props<{ config: { url?: string, slug?: string } }>();
 
-    let statusData = $state<Record<string, any> | null>(null);
+    interface KumaHeartbeat {
+        status: number;
+        time: string;
+    }
+
+    interface KumaMonitor {
+        id: number;
+        name: string;
+    }
+
+    interface KumaStatusData {
+        heartbeatList: Record<string, KumaHeartbeat[]>;
+        monitorList: KumaMonitor[];
+    }
+
+    let statusData = $state<KumaStatusData | null>(null);
     let error = $state(false);
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
