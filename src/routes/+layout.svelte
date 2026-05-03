@@ -118,7 +118,7 @@
 					<form action="/logout" method="POST" class="flex">
 						<button
 							type="submit"
-							class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-white"
+							class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-secondary hover:bg-secondary/80 transition-colors border border-border text-foreground"
 						>
 							<LogOut size={12} />
 							<span>Logout</span>
