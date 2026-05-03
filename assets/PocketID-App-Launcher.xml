@@ -33,7 +33,7 @@
   <Config Name="CUSTOM_LOGO" Target="CUSTOM_LOGO" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
   <Config Name="CUSTOM_LOGO_DARK" Target="CUSTOM_LOGO_DARK" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
   <Config Name="CUSTOM_LOGO_LIGHT" Target="CUSTOM_LOGO_LIGHT" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
-  <Config Name="Host Path" Target="/app/local/" Default="" Mode="rw" Description="" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/app-launcher/local/</Config>
+  <Config Name="Host Path" Target="/app/logs/" Default="" Mode="rw" Description="Path for persistent logs" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/app-launcher/</Config>
   <Config Name="UPTIME_KUMA_URL" Target="UPTIME_KUMA_URL" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
   <Config Name="UPTIME_KUMA_SLUG" Target="UPTIME_KUMA_SLUG" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"></Config>
   <Config Name="PUBLIC_LAUNCHER_TITLE" Target="PUBLIC_LAUNCHER_TITLE" Default="" Mode="" Description="" Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
