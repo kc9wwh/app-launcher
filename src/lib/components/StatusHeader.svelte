@@ -10,6 +10,8 @@
     let { config } = $props<{ config: { url?: string, slug?: string } }>();
 
     let statusData = $state<Record<string, any> | null>(null);
+    let monitorMap = $state<Map<number, string>>(new Map());
+    let lastConfigFetch = $state<number>(0);
     let error = $state(false);
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
@@ -17,13 +19,30 @@
     const kumaSlug = $derived(config?.slug);
     
     const baseKumaUrl = $derived(kumaUrl?.startsWith('http') ? kumaUrl : `https://${kumaUrl}`);
-    const endpoint = $derived(kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/api/status-page/heartbeat/${kumaSlug}` : null);
+    const heartbeatEndpoint = $derived(kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/api/status-page/heartbeat/${kumaSlug}` : null);
+    const configEndpoint = $derived(kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/api/status-page/${kumaSlug}` : null);
     const statusPageUrl = $derived(kumaUrl && kumaSlug ? `${baseKumaUrl.replace(/\/$/, '')}/status/${kumaSlug}` : null);
 
     async function fetchStatus() {
-        if (!endpoint) return;
+        if (!heartbeatEndpoint) return;
         try {
-            const res = await fetch(endpoint);
+            // Fetch config if map is empty or it's been 24 hours
+            if (configEndpoint && (monitorMap.size === 0 || Date.now() - lastConfigFetch > 86400000)) {
+                const configRes = await fetch(configEndpoint);
+                if (configRes.ok) {
+                    const configData = await configRes.json();
+                    const newMap = new Map<number, string>();
+                    configData.publicGroupList?.forEach((group: any) => {
+                        group.monitorList?.forEach((monitor: any) => {
+                            newMap.set(monitor.id, monitor.name);
+                        });
+                    });
+                    monitorMap = newMap;
+                    lastConfigFetch = Date.now();
+                }
+            }
+
+            const res = await fetch(heartbeatEndpoint);
             if (!res.ok) throw new Error('Fetch failed');
             statusData = await res.json();
             error = false;
@@ -34,8 +53,8 @@
     }
 
     function startPolling() {
-        if (!intervalId && endpoint) {
-            console.log('Starting health status polling:', endpoint);
+        if (!intervalId && heartbeatEndpoint) {
+            console.log('Starting health status polling:', heartbeatEndpoint);
             fetchStatus();
             intervalId = setInterval(fetchStatus, 60000);
         }
@@ -49,7 +68,7 @@
     }
 
     onMount(() => {
-        if (!endpoint) return;
+        if (!heartbeatEndpoint) return;
 
         startPolling();
 
@@ -88,8 +107,6 @@
         if (error || !statusData) return { state: -1, services: [] };
         
         const heartbeats = statusData.heartbeatList || {};
-        const monitors = statusData.monitorList || [];
-        const monitorMap = new Map(monitors.map((m: any) => [m.id, m]));
         
         let worstStatus = 1;
         const statusPriority: Record<number, number> = { 0: 4, 3: 3, 2: 2, 1: 1 };
@@ -106,9 +123,8 @@
                 }
                 
                 if (status !== 1) {
-                    const monitor: any = monitorMap.get(Number(monitorId));
                     affected.push({
-                        name: monitor?.name || `Service ${monitorId}`,
+                        name: monitorMap.get(Number(monitorId)) || `Service ${monitorId}`,
                         status,
                         duration: calculateDuration(last.time)
                     });
@@ -120,6 +136,12 @@
     });
 
     const statusConfig = $derived.by(() => {
+        const firstService = aggregated.services[0];
+        const additionalCount = aggregated.services.length - 1;
+        const serviceLabel = firstService 
+            ? `${firstService.name}${additionalCount > 0 ? ` +${additionalCount}` : ''}`
+            : '';
+
         switch (aggregated.state) {
             case 1:
                 return {
@@ -130,21 +152,21 @@
                 };
             case 0:
                 return {
-                    label: 'Service Disruption',
+                    label: serviceLabel || 'Service Disruption',
                     color: 'bg-red-500/10 text-red-500 border-red-500/20',
                     dot: 'bg-red-500',
                     tooltip: aggregated.services
                 };
             case 3:
                 return {
-                    label: 'Maintenance',
+                    label: serviceLabel || 'Maintenance',
                     color: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
                     dot: 'bg-blue-500',
                     tooltip: aggregated.services
                 };
             case 2:
                 return {
-                    label: 'Systems Checking',
+                    label: serviceLabel || 'Systems Checking',
                     color: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
                     dot: 'bg-amber-500',
                     tooltip: aggregated.services
@@ -160,7 +182,7 @@
     });
 </script>
 
-{#if endpoint}
+{#if heartbeatEndpoint}
 <div class="relative group flex items-center">
     <a 
         href={statusPageUrl} 
