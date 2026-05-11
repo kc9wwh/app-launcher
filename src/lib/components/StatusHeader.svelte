@@ -26,19 +26,23 @@
     async function fetchStatus() {
         if (!heartbeatEndpoint) return;
         try {
-            // Fetch config if map is empty or it's been 24 hours
-            if (configEndpoint && (monitorMap.size === 0 || Date.now() - lastConfigFetch > 86400000)) {
-                const configRes = await fetch(configEndpoint);
-                if (configRes.ok) {
-                    const configData = await configRes.json();
-                    const newMap = new Map<number, string>();
-                    configData.publicGroupList?.forEach((group: any) => {
-                        group.monitorList?.forEach((monitor: any) => {
-                            newMap.set(monitor.id, monitor.name);
+            // Fetch config if it's the first time or it's been 24 hours
+            if (configEndpoint && (lastConfigFetch === 0 || Date.now() - lastConfigFetch > 86400000)) {
+                try {
+                    const configRes = await fetch(configEndpoint);
+                    if (configRes.ok) {
+                        const configData = await configRes.json();
+                        const newMap = new Map<number, string>();
+                        configData.publicGroupList?.forEach((group: any) => {
+                            group.monitorList?.forEach((monitor: any) => {
+                                newMap.set(monitor.id, monitor.name);
+                            });
                         });
-                    });
-                    monitorMap = newMap;
-                    lastConfigFetch = Date.now();
+                        monitorMap = newMap;
+                        lastConfigFetch = Date.now();
+                    }
+                } catch (e) {
+                    console.error('Failed to fetch status page config:', e);
                 }
             }
 
