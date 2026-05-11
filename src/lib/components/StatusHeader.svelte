@@ -146,28 +146,28 @@
             case 1:
                 return {
                     label: 'Operational',
-                    color: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+                    color: 'bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border-emerald-500/20',
                     dot: 'bg-emerald-500 animate-pulse',
                     tooltip: 'All systems operational'
                 };
             case 0:
                 return {
                     label: serviceLabel || 'Service Disruption',
-                    color: 'bg-red-500/10 text-red-500 border-red-500/20',
+                    color: 'bg-red-500/10 text-red-500 dark:text-red-400 border-red-500/20',
                     dot: 'bg-red-500',
                     tooltip: aggregated.services
                 };
             case 3:
                 return {
                     label: serviceLabel || 'Maintenance',
-                    color: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+                    color: 'bg-blue-500/10 text-blue-500 dark:text-blue-400 border-blue-500/20',
                     dot: 'bg-blue-500',
                     tooltip: aggregated.services
                 };
             case 2:
                 return {
                     label: serviceLabel || 'Systems Checking',
-                    color: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+                    color: 'bg-amber-500/10 text-amber-500 dark:text-amber-400 border-amber-500/20',
                     dot: 'bg-amber-500',
                     tooltip: aggregated.services
                 };
