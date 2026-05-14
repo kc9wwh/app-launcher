@@ -1,0 +1,22 @@
+<CommunityApplications>
+  <Profile>
+    A clean, simple, and aesthetically pleasing application launcher designed for families and friends. It integrates directly with your self-hosted **Pocket ID** instance to fetch applications and handle authentication.
+
+    [b][u]Troubleshooting &amp; Support[/u][/b]
+
+    If you encounter issues, please open a GitHub Issue at https://github.com/kc9wwh/app-launcher/issues and provide the following information:
+    1. [b]Unraid Version[/b] you are running.
+    2. A [b]screenshot[/b] of your Docker template configuration (mask any sensitive secrets/API keys).
+    3. [b]Container Logs[/b]: You can check the container logs in the Unraid GUI or grab the persistent JSON log if you mapped the /app/logs directory.
+    4. If the health status pill (Uptime Kuma integration) isn't working, please check your browser console (F12) for CORS or fetch errors.
+  </Profile>
+  <Icon
+    >https://raw.githubusercontent.com/kc9wwh/app-launcher/main/static/favicon.svg</Icon>
+  <WebPage>https://github.com/kc9wwh/app-launcher</WebPage>
+  <!-- Optional support links -->
+  <!-- <Forum>https://forums.unraid.net/topic/YOUR_SUPPORT_TOPIC</Forum> -->
+  <!-- <Discord>https://discord.gg/YOUR_INVITE_CODE</Discord> -->
+  <!-- Optional profile extras -->
+  <!-- <DonateLink>https://github.com/sponsors/YOUR_GITHUB_USERNAME</DonateLink> -->
+  <!-- <DonateText>Support this project</DonateText> -->
+</CommunityApplications>
