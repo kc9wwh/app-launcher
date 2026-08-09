@@ -8,6 +8,7 @@ declare global {
 				sub: string;
 				username: string;
 				firstName?: string;
+				name?: string;
 				email?: string;
 				groups?: string[];
 				picture?: string;
