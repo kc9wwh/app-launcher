@@ -31,6 +31,12 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 2. Create a new token with at least `read` access to clients.
 3. Note this token down.
 
+### Discord Webhook Setup
+1. Go to your Discord server **Server Settings > Integrations > Webhooks**.
+2. Click **New Webhook** and copy the **Webhook URL**.
+3. Paste the URL into the `DISCORD_WEBHOOK_URL` environment variable.
+4. *(Optional)* Add a `DISCORD_USER_ID` to ping a specific user when tickets are submitted.
+
 ### 2. Environment Variables
 
 | Variable | Requirement | Description | Example |
@@ -47,8 +53,11 @@ Before deploying the launcher, you need to configure two things in your Pocket I
 | `CUSTOM_LOGO_LIGHT` | Optional | Logo for light theme (URL or local path) | `/app/logo-light.png` |
 | `UPTIME_KUMA_URL` | Optional | Public URL of your Uptime Kuma instance | `status.example.com` |
 | `UPTIME_KUMA_SLUG` | Optional | The 'Slug' from Status Page settings | `default` |
+| `DISCORD_WEBHOOK_URL` | Optional | Discord Webhook URL for support tickets | `https://discord.com/api/...` |
+| `DISCORD_USER_ID` | Optional | Optional Discord User ID to ping on new tickets | `123456789012345678` |
 | `LOG_LEVEL` | Optional | Logging verbosity (debug, info, warn, error) | `info` |
 | `LOG_PATH` | Optional | Path for persistent JSON log file | `/app/logs/launcher.log` |
+
 
 ---
 
