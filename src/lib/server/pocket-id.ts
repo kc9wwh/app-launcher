@@ -41,30 +41,62 @@ export class PocketIDService {
         }
 
         const apiKey = env.POCKET_ID_API_KEY;
-        const url = `${env.POCKET_ID_URL}/api/oidc/clients`;
-        
-        try {
-            const response = await fetch(url, {
-                headers: {
-                    'X-API-Key': apiKey
-                }
-            });
+        const baseUrl = `${env.POCKET_ID_URL}/api/oidc/clients`;
+        const limit = 100;
+        let page = 1;
+        let allClients: any[] = [];
 
-            if (!response.ok) {
-                const text = await response.text();
-                logger.warn({ 
-                    event: 'api_fetch_error', 
-                    status: response.status, 
-                    url 
-                }, `Pocket ID API error: ${text || response.statusText}`);
-                throw new Error(`Pocket ID API error (${response.status}): ${text || response.statusText}`);
+        try {
+            while (true) {
+                const url = `${baseUrl}?pagination[page]=${page}&pagination[limit]=${limit}`;
+                logger.debug({ event: 'api_fetch_page', page, limit, url }, `Fetching page ${page} from Pocket ID`);
+
+                const response = await fetch(url, {
+                    headers: {
+                        'X-API-Key': apiKey
+                    }
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    logger.warn({ 
+                        event: 'api_fetch_error', 
+                        status: response.status, 
+                        url 
+                    }, `Pocket ID API error: ${text || response.statusText}`);
+                    throw new Error(`Pocket ID API error (${response.status}): ${text || response.statusText}`);
+                }
+
+                const data = await response.json();
+                const clients = Array.isArray(data) ? data : (data?.data || []);
+                const pagination = data?.pagination;
+
+                logger.debug({
+                    event: 'api_fetch_page_result',
+                    page,
+                    clients_on_page: clients.length,
+                    client_names: clients.map((c: any) => c.name),
+                    pagination
+                }, `Page ${page}: received ${clients.length} clients`);
+
+                allClients = allClients.concat(clients);
+
+                // Stop if we got fewer items than the limit (last page) or no pagination info
+                if (!pagination || clients.length < limit || page >= (pagination.totalPages || page)) {
+                    break;
+                }
+                page++;
             }
 
-            const data = await response.json();
-            logger.info({ event: 'api_fetch_success', app_count: data?.data?.length || 0 }, 'Successfully fetched applications');
-            return data;
+            logger.info({
+                event: 'api_fetch_success',
+                total_app_count: allClients.length,
+                all_app_names: allClients.map((c: any) => c.name)
+            }, `Successfully fetched all ${allClients.length} applications`);
+
+            return { data: allClients };
         } catch (e: any) {
-            logger.error({ event: 'api_fetch_failed', error: e.message, url }, 'Failed to fetch applications from Pocket ID');
+            logger.error({ event: 'api_fetch_failed', error: e.message, page }, 'Failed to fetch applications from Pocket ID');
             throw e;
         }
 	}
